@@ -1,0 +1,1213 @@
+$unit: 1.25vmin;
+$red-01: #ef1852;
+$red-02: #ad1852;
+$yellow-01: #ffd6ae;
+$yellow-02: #f68c8e;
+$yellow-03: #ef9ca5;
+$yellow-04: #ee6b8a;
+$white-01: #ffffff;
+$blue-01: #6b9cb5;
+$purple-01: #38044e;
+$bg: #fd6daa;
+
+$type: cubic-bezier(.17,.67,.62,.94);
+$type-02: cubic-bezier(.17,.67,.62,.94);
+$time: 3000ms;
+$time-02: 100ms;
+$time-03: 4000ms;
+
+@mixin cube($width, $height, $depth) {
+    &-front{ @include cube-front($width, $height, $depth); }
+    &-back{ @include cube-back($width, $height, $depth); }
+    &-right{ @include cube-right($width, $height, $depth); }
+    &-left{ @include cube-left($width, $height, $depth); }
+    &-top{ @include cube-top($width, $height, $depth);}
+    &-bottom{ @include cube-bottom($width, $height, $depth); }
+}
+//----------------------
+@mixin cube-front($width, $height, $depth) {
+    width: $width;
+    height: $height;
+    transform-origin: bottom left;
+    transform: rotateX(-90deg) translateZ( -($height - ($depth * 2) ) );
+}
+@mixin cube-back($width, $height, $depth) {
+    width: $width;
+    height: $height;
+    transform-origin: top left;
+    transform: rotateX(-90deg) rotateY(180deg) translateX(-$width) translateY(-$height) ;
+}
+@mixin cube-right($width, $height, $depth) {
+    width: $depth * 2;
+    height: $height;
+    transform-origin: top left;
+    transform: rotateY(90deg) rotateZ(-90deg) translateZ($width) translateX(-$depth * 2) translateY(-$height);
+}
+@mixin cube-left($width, $height, $depth) {
+    width: $depth * 2;
+    height: $height;
+    transform-origin: top left;
+    transform: rotateY(-90deg) rotateZ(90deg) translateY(-$height);
+}
+@mixin cube-top($width, $height, $depth) {
+    width: $width;
+    height: $depth * 2;
+    transform-origin: top left;
+    transform: translateZ($height) ;
+}
+@mixin cube-bottom($width, $height, $depth) {
+    width: $width;
+    height: $depth * 2;
+    transform-origin: top left;
+    transform: rotateY(180deg) translateX(-$width);
+}
+/***********************/
+/***********************/
+*, *::after, *::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+    transform-style: preserve-3d;
+
+	user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    appearance: none;
+}
+/***********************/
+/***********************/
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+
+    overflow: hidden;
+    background-color: $bg;
+}
+
+.main{
+    position: absolute;
+    width: 70 * $unit;
+    height: 70 * $unit;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    transform: perspective(100 * $unit);
+
+    &::before {
+        content: '';
+        position: absolute;
+        bottom: 11 * $unit;
+        left: 28 * $unit;
+        width: 15 * $unit;
+        height: 1.5 * $unit;
+        background-color: $purple-01;
+        border-radius: 50%;
+    }
+}
+
+.p01 {
+    position: absolute;
+    bottom: 13 * $unit;
+    left: 10 * $unit;
+    width: 15 * $unit;
+    height: 22 * $unit;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 102%;
+        width: 100%;
+        height: 1.5 * $unit;
+        background-color: $purple-01;
+        border-radius: 50%;
+    }
+
+    &__cuerpo {
+        position: absolute;
+        top: 3 * $unit;
+        width: 14 * $unit;
+        height: 14 * $unit;
+        border-radius: 50%;
+        background-color: $yellow-03;
+
+        animation: p01-cuerpo01 $time infinite;
+        border-left: .25 * $unit solid $white-01;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: -.25 * $unit;
+            width: 14.5 * $unit;
+            height: 14.5 * $unit;
+            border-radius: 50%;
+            background-image: radial-gradient(transparent 55%, $yellow-04 55% 65%, transparent 65%);
+            background-size: 550% 550%;
+            background-position: bottom center;
+           // border-left: .25 * $unit solid $white-01;
+            
+            transform: rotateZ(10deg);
+            animation: p01-cuerpo02 $time-02 infinite alternate;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 1.5 * $unit;
+            left: 8 * $unit;
+            width: 2 * $unit;
+            height: 2 * $unit;
+            background-color: rgba($white-01, .7);
+            border-radius: 50%;
+        }
+    }
+    &__shadow {
+        position: absolute;
+        width: 14 * $unit;
+        height: 14 * $unit;
+        border-radius: 50%;
+        overflow: hidden;
+        mix-blend-mode: lighten;
+        mix-blend-mode: color-burn;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 10 * $unit;
+            left: -4 * $unit;
+            width: 14 * $unit;
+            height: 12 * $unit;
+            background-color: rgba($yellow-01, .5);
+            transform-origin: bottom left;
+            transform: rotateZ(-3deg) skewY(20deg);
+
+            animation: 
+                p01-shadow01 $time $type infinite,
+                p01-shadow02 $time-02 $type infinite alternate;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 8 * $unit;
+            height: 2 * $unit;
+            transform-origin: bottom left;
+            transform: skewX(-40deg);
+            background-color: rgb(24, 19, 80);
+
+            animation: p01-shadow03 $time $type infinite;
+        }
+    }
+
+    &__brazoD {
+        position: absolute;
+        top: 8 * $unit;
+        left: 2.5 * $unit;
+        width: .3 * $unit;
+        height: 5 * $unit;
+        transform-origin: top left;
+        transform: rotateZ(23deg);
+        background-color: $purple-01;
+
+        animation: p01-brazoD01 $time $type infinite;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 0 * $unit;
+            left: 0;
+            width: 6 * $unit;
+            height: .4 * $unit;
+            background-color: $purple-01;
+            transform-origin: top left;
+            transform: rotateZ(-12deg);
+
+            animation: p01-brazoDB01 $time $type infinite;
+        }
+    }
+
+    &__piernaD {
+        position: absolute;
+        top: 12 * $unit;
+        left: 5 * $unit;
+        width: .3 * $unit;
+        height: 3.5 * $unit;
+        transform-origin: top left;
+        transform: rotateZ(-15deg);
+        background-color: $purple-01;
+
+        animation: p01-piernaD01 $time $type infinite;
+    }
+
+    &__pantorrillaD {
+        position: absolute;
+        top: 95%;
+        width: 100%;
+        height: 3.5 * $unit;
+        transform-origin: top left;
+        transform: rotateZ(30deg);
+        background-color: $purple-01;
+
+        animation: p01-pantorrillaD01 $time $type infinite;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 2.75 * $unit;
+            height: 2.5 * $unit;
+            top: 70%;
+            left: -.5 * $unit;
+            background-color: $purple-01;
+            transform-origin: top left;
+            transform: rotateZ(-15deg) skewX(-15deg);
+            border-top: .35 * $unit solid $white-01;
+
+        }
+    }
+    // ==========================
+    &__brazoI {
+        position: absolute;
+        top: 10 * $unit;
+        right: .25 * $unit;
+        width: .3 * $unit;
+        height: 4 * $unit;
+        transform-origin: top right;
+        transform: rotateZ(-32deg);
+        background-color: $purple-01;
+
+        animation: p01-brazoI01 $time $type infinite;
+
+        &::before {
+            content: '';
+            position: absolute;
+            width: 5 * $unit;
+            height: .35 * $unit;
+            bottom: 0 * $unit;
+            right: 0;
+            background-color: $purple-01;
+            transform-origin: top right;
+            transform: rotateZ(5deg);
+
+            animation: p01-brazoIB01 $time $type infinite;
+        }
+    }
+    
+
+    &__piernaI {
+        position: absolute;
+        top: 12.8 * $unit;
+        right: 5 * $unit;
+        width: .3 * $unit;
+        height: 3 * $unit;
+        transform-origin: top right;
+        transform: rotateZ(-40deg);
+        background-color: $purple-01;
+
+        animation: p01-piernaI01 $time $type infinite,;
+    }
+
+    &__pantorrillaI{
+        position: absolute;
+        top: 90%;
+        right: 0;
+        width: 100%;
+        height: 3 * $unit;
+        background-color: $purple-01;
+        transform-origin: top left;
+        transform: rotateZ(55deg);
+
+        animation: p01-pantorrillaI01 $time $type infinite;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 70%;
+            left: -.2 * $unit;
+            width: 3 * $unit;
+            height: 2.55 * $unit;
+            background-color: $purple-01;
+            transform-origin: top left;
+            transform: rotateZ(-15deg) skewX(-20deg);
+            border-top: .35 * $unit solid $white-01;
+        }
+    }
+
+    &__gorra {
+        position: absolute;
+        bottom: 97%;
+        left: 5 * $unit;
+        width: 4 * $unit;
+        height: 3.5 * $unit;
+        background-color: $red-01;
+        border-top-left-radius: 2 * $unit;
+        border-top-right-radius: 2 * $unit;
+        border-right: .1 * $unit solid $white-01;
+
+        animation: p01-gorra $time $type infinite;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 150%;
+            height: .75 * $unit;
+            background-color: $red-02;
+            border-top-left-radius: 50%;
+            border-top-right-radius: 50%;
+        
+        }
+    }
+
+    &__cara {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        animation: 
+            p01-cara01 $time $type infinite,
+            p01-cara02 $time-02 $type infinite
+        ;
+    }
+
+    &__ojoD,
+    &__ojoI {
+        position: absolute;
+        width: 4 * $unit;
+        height: 4 * $unit;
+        border-radius: 50%;
+        border: .5 * $unit solid transparent;
+        border-top: .5 * $unit solid $purple-01;
+    }
+
+    &__ojoD {
+        top: 3.5 * $unit;
+        left: 3.25 * $unit;
+        transform: rotateZ(10deg);
+    }
+    &__ojoI {
+        top: 4.5 * $unit;
+        right: 1.25 * $unit;
+        transform: rotateZ(10deg);
+    }
+    &__boca {
+        position: absolute;
+        top: 7 * $unit;
+        left: 4 * $unit;
+        width: 7 * $unit;
+        height: 3 * $unit;
+        border-radius: 3 * $unit;
+        transform: scale(1) rotateZ(10deg);
+        background-color: $purple-01;
+        overflow: hidden;
+
+        animation: p01-boca $time $type infinite;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: -75%;
+            // left: calc(50% - (1.5 * $unit));
+            left: 30%;
+            width: 3 * $unit;
+            height: 3 * $unit;
+            border-radius: 50%;
+            background-color: $red-02
+        }
+    }
+}
+// ===================================
+// ===================================
+
+@keyframes p01-cuerpo01 {
+    0%, 20%, 80%, 100% { transform: rotateZ(0deg); }
+    40%, 70% { transform: rotateZ(-30deg); }
+}
+@keyframes p01-cuerpo02 { 
+    to { transform: translateY(1.5%) rotateZ(10deg); } 
+}
+
+@keyframes p01-cara01 {
+    0%, 28%,  100% { transform: translateY(0); }
+    30%, 60% { transform: translateY(-1 * $unit); }
+}
+
+@keyframes p01-cara02 { to { left: .2 * $unit;} }
+
+@keyframes p01-brazoD01 {
+    0%, 20%, 100%{ transform: rotateZ(23deg); }
+    40%, 70% { transform: rotateZ(50deg); }
+    80%, 95% { transform: rotateZ(0deg); }
+}
+@keyframes p01-brazoDB01 {
+    0%, 10%, 20%, 30%, 80%{ transform: rotateZ(-12deg); }
+    5%, 15%, 25%, 35% { transform: rotateZ(20deg); }
+    40%{ transform: rotateZ(0deg); }
+    70%{ transform: rotateZ(-10deg); }
+}
+
+@keyframes p01-piernaD01 {
+    0%, 20%, 80%, 100% { transform: rotateZ(-20deg); }
+    40%, 70% { transform: rotateZ(50deg); }
+}
+
+@keyframes p01-pantorrillaD01 {
+    0%, 20%, 80%, 100% {
+        height: 3.2 * $unit;
+        transform: rotateZ(30deg);
+    }
+    40%, 70% {
+        height: 2.7 * $unit;
+        transform: rotateZ(0deg);
+    }
+}
+
+@keyframes p01-brazoI01 {
+    0%, 20%, 100%{ transform: rotateZ(-32deg); }
+    40%, 70% { transform: rotateZ(-10deg); }
+    80%, 95% { transform: rotateZ(10deg); }
+}
+
+@keyframes p01-brazoIB01 {
+    0%, 20%, 80%, 100%{ transform: rotateZ(5deg); }
+    40%{ transform: rotateZ(10deg); }
+    70%{ transform: rotateZ(-40deg); }
+}
+
+@keyframes p01-piernaI01 {
+    0%, 20%, 80%, 100% {  transform: rotateZ(-40deg); }
+    40%, 70% { transform: rotateZ(-60deg); }
+}
+
+@keyframes p01-pantorrillaI01 {
+    0%, 20%, 80%, 100% { transform: rotateZ(55deg); }
+    40%, 70% { transform: rotateZ(100deg); }
+}
+
+@keyframes p01-shadow01 {
+    0%, 25%, 80%, 100% {left: -4 * $unit; }
+    35%, 40%, 70% { left: -2 * $unit;}
+}
+@keyframes p01-shadow02 { to { left: -4.5 * $unit; } }
+
+@keyframes p01-shadow03 {
+    0%, 30%, 45%, 100% {
+        top: 0;
+        transform: rotateZ(0) skewX(-40deg);
+    }
+    35%, 40% {
+        top: -10%;
+        transform: translateY(-2%) (12deg) skewX(-40deg);
+    }
+}
+
+@keyframes p01-gorra {
+    0%, 30%, 45%, 100% {  
+        transform: rotateZ(0);
+        bottom: 97%; 
+    }
+    35%, 40%{  
+        transform: rotateZ(-25deg);
+        bottom: 110%; 
+    }
+}
+@keyframes p01-boca {
+    0%, 10%, 20%, 30%, 45%, 55%, 65%, 75%, 85%, 95%, 100% { transform: scale(1) rotateZ(10deg) ; }
+    5%, 15%, 25%, 50%, 60%, 70%, 80%, 90%  { transform: scale(1.05) rotateZ(10deg); }
+    35%, 40% { transform: scale(1.2) rotateZ(10deg); }
+}
+// =======================
+// =======================
+.p02 {
+    position: absolute;
+    bottom: 13 * $unit;
+    right: 5 * $unit;
+    width: 30 * $unit;
+    height: 46 * $unit;
+
+    animation: p02-cuerpo02 $time-02 * 4 infinite alternate;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 102%;
+        width: 50%;
+        left: 10.5 * $unit;
+        height: 1.5 * $unit;
+        background-color: $purple-01;
+        border-radius: 50%;
+    }
+
+    &__cuerpo {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 19 * $unit;
+        height: 19 * $unit;
+        border-radius: 50%;
+        background-color: $red-02;
+        border-right: .2 * $unit solid $white-01;
+
+        animation: p02-cuerpo01 $time-03 infinite alternate;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: 1.5 * $unit;
+            left: 10 * $unit;
+            width: 3 * $unit;
+            height: 3 * $unit;
+            background-color: rgba($white-01, .9);
+            border-radius: 50%;
+        }
+    }
+
+    &__tronco {
+        position: absolute;
+        top: 95%;
+        left: 6.5 * $unit;
+        width: .8 * $unit;
+        height: 22 * $unit;
+        transform-origin: top left;
+        transform: rotateZ(15deg);
+        background-image: linear-gradient(to bottom, $purple-01 20%, $white-01 20%);
+    }
+
+    &__shadow {
+        position: absolute;
+        width: 19 * $unit;
+        height: 19 * $unit;
+        border-radius: 50%;
+        overflow: hidden;
+        mix-blend-mode: lighten;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 5 * $unit;
+            right: -9 * $unit;
+            width: 20 * $unit;
+            height: 20 * $unit;
+            background-color: $red-01;
+            transform-origin: bottom left;
+            transform: rotateZ(-10deg);
+      
+            
+            animation: p02-shadow01 $time-03 $type infinite;
+        }
+    }
+    
+    &__brazoD {
+        position: absolute;
+        top: 9 * $unit;
+        left: 0 * $unit;
+        width: .3 * $unit;
+        height: 6 * $unit;
+        transform-origin: top left;
+        transform: rotateZ(90deg);
+        background-color: $yellow-01;
+
+        animation: p02-brazoD01 $time-03 $type infinite;
+    }
+
+    &__brazoD2 {
+        position: absolute;
+        bottom: 0 * $unit;
+        left: .25 * $unit;
+        width: 10 * $unit;
+        height: .4 * $unit;
+        background-color: $yellow-01;
+        transform-origin: bottom left;
+        transform: rotateZ(170deg);
+
+        animation: p02-brazoDB01 $time-03 $type infinite;
+    }
+
+    &__piernaD {
+        position: absolute;
+        top: 93%;
+        left: 5 * $unit;
+        width: .3 * $unit;
+        height: 15 * $unit;
+        transform-origin: top left;
+        transform: rotateZ(15deg);
+        background-color: $yellow-01;
+        
+        animation: p02-piernaD01 $time-03 $type infinite;
+    }
+
+    &__pantorrillaD {
+        position: absolute;
+        top: 100%;
+        width: 100%;
+        height: 15 * $unit;
+        transform-origin: top left;
+        transform: rotateZ(-30deg);
+        background-color: $yellow-01;
+
+        animation: p02-pantorrillaD01 $time-03 $type infinite;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 2.75 * $unit;
+            height: 2.5 * $unit;
+            top: 90%;
+            right: -.5 * $unit;
+            background-color: $purple-01;
+            transform-origin: top right;
+            transform: rotateZ(15deg) skewX(15deg);
+            border-top: .35 * $unit solid $white-01;
+
+        }
+    }
+
+    &__brazoI {
+        position: absolute;
+        top: 14 * $unit;
+        right: 1 * $unit;
+        width: .3 * $unit;
+        height: 10 * $unit;
+        transform-origin: top right;
+        transform: rotateZ(-15deg);
+        background-color: $yellow-01;
+
+        animation: p02-brazoI01 $time-03 $type infinite;
+
+        &::before {
+            content: '';
+            position: absolute;
+            width: 10 * $unit;
+            height: .35 * $unit;
+            bottom: 0 * $unit;
+            right: 0;
+            background-color: $yellow-01;
+            transform-origin: bottom right;
+            transform: rotateZ(-45deg);
+
+            animation: p02-brazoIB01 $time-03 $type infinite;
+        }
+    }
+
+    &__piernaI {
+        position: absolute;
+        top: 100%;
+        right: 10 * $unit;
+        width: .3 * $unit;
+        height: 12 * $unit;
+        transform-origin: top right;
+        transform: rotateZ(15deg);
+        background-color: $yellow-01;
+
+        animation: p02-piernaI01 $time-03 $type infinite,;
+    }
+
+    &__pantorrillaI{
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        height: 15.5 * $unit;
+        background-color: $yellow-01;
+        transform-origin: top left;
+        transform: rotateZ(-35deg);
+
+        animation: p02-pantorrillaI01 $time-03 $type infinite;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            right: -.2 * $unit;
+            width: 3 * $unit;
+            height: 2.55 * $unit;
+            background-color: $purple-01;
+            transform-origin: top right;
+            transform: rotateZ(15deg) skewX(20deg);
+            border-top: .35 * $unit solid $white-01;
+
+        }
+    }
+
+    &__cara {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        animation: 
+            p02-cara01 $time-03 $type infinite,
+            p02-cara02 $time-02 $type infinite
+        ;
+    }
+
+    &__ojoD,
+    &__ojoI {
+        position: absolute;
+        width: 4.5 * $unit;
+        height: 4.5 * $unit;
+        border-radius: 50%;
+        border: .5 * $unit solid transparent;
+        border-top: .5 * $unit solid $purple-01;
+    }
+
+    &__ojoD {
+        top: 7 * $unit;
+        left: 3.5 * $unit;
+        transform: rotateZ(10deg);
+    }
+    &__ojoI {
+        top: 8 * $unit;
+        right: 5 * $unit;
+        transform: rotateZ(10deg);
+    }
+    &__boca {
+        position: absolute;
+        top: 10.5 * $unit;
+        left: 4.5 * $unit;
+        width: 7 * $unit;
+        height: 4 * $unit;
+        border-radius: 3 * $unit;
+        transform: scale(1) rotateZ(10deg);
+        background-color: $purple-01;
+        overflow: hidden;
+
+        animation: p01-boca $time $type infinite;
+
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            // left: calc(50% - (1 * $unit));
+            left: 34%;
+            width: 2 * $unit;
+            height: 2 * $unit;
+            background-image: linear-gradient(to right, $white-01 45%, $purple-01 45% 55%, $white-01 55%);
+
+        }
+    }
+
+    &__chamarraI {
+        position: absolute;
+        right: 0;
+        top: 10 * $unit;
+        width: 4 * $unit;
+        height: 8 * $unit;
+        border-top-left-radius: 5 * $unit;
+        background-image: radial-gradient(circle at 65% 50%,transparent 20%, $purple-01 20%);
+        border-left: .1 * $unit solid $white-01;   
+
+        transform-origin: top right;
+        animation: p02-chamarraI01 $time-03 $type infinite;
+        
+    }
+
+    &__chamarraD {
+        position: absolute;
+        left: .71 * $unit;
+        top: 5.5 * $unit;
+        width: 5 * $unit;
+        height: 10 * $unit;
+        border-top-left-radius: 5 * $unit;
+        background-image: radial-gradient(circle at 100% 50%,transparent 76%, $purple-01 76%);
+        transform: rotateZ(10deg);
+
+    }
+}
+
+@keyframes p02-cuerpo01 {
+    0%, 20%, 80%, 100% { transform: translateY(0); }
+    40%, 70% {  transform: translateY(10%); }
+}
+
+@keyframes p02-cuerpo02 {
+    0%, 20%, 80%, 100% { 
+        transform-origin: bottom center;
+        transform: scale(.9975); 
+    }
+    40%, 70% { 
+        transform-origin: bottom center;
+        transform: scale(1); 
+    }
+}
+
+@keyframes p02-cara01 {
+    0%, 28%,  100% { transform: translateY(0); }
+    30%, 60% { transform: translateY(-1 * $unit); }
+}
+@keyframes p02-cara02 { to { left: .2 * $unit;} }
+
+@keyframes p02-brazoD01 {
+    0%, 20%, 40%, 60%, 80%, 90%, 100%{ transform: rotateZ(90deg); }
+    10%, 30%, 50%, 70% { transform: rotateZ(100deg); }
+}
+@keyframes p02-brazoDB01 {
+    0%, 10%, 20%, 30%, 80%, 90%, 100%{ transform: rotateZ(200deg); }
+    5%, 15%, 25%, 35%, 85% { transform: rotateZ(180deg); }
+    40%{ transform: rotateZ(170deg); }
+    70%{ transform: rotateZ(190deg); }
+}
+
+@keyframes p02-pantorrillaD01 {
+    0%, 20%, 80%, 100% {
+        transform: rotateZ(-30deg);
+        height: 15 * $unit;
+    }
+    3%, 70% {
+        transform: rotateZ(-33deg);
+        height: 13 * $unit;
+    }
+}
+
+@keyframes p02-brazoI01 {
+    0%, 20%, 100%{ transform: rotateZ(-15deg); }
+    40%, 70% { transform: rotateZ(15deg); }
+    80%, 95% { transform: rotateZ(0deg); }
+}
+@keyframes p02-brazoIB01 {
+    0%, 10%, 20%, 30%, 80%{ transform: rotateZ(-70deg); }
+    5%, 15%, 25%, 35% { transform: rotateZ(-65deg); }
+    40%{ transform: rotateZ(-60deg); }
+    70%{ transform: rotateZ(-65deg); }
+}
+
+@keyframes p02-piernaI01 {
+    0%, 20%, 80%, 100% {  transform: rotateZ(15deg); }
+    40%, 70% { transform: rotateZ(-30deg); }
+}
+
+@keyframes p02-shadow01 {
+    0%, 20%, 80%, 100% {
+        right: -9 * $unit;
+        transform: rotateZ(-10deg);
+
+    }
+    40%, 70%  {
+        right: -6 * $unit;
+        transform: rotateZ(0deg);
+    }
+}
+
+@keyframes p02-chamarraI01 {
+    0%, 10%, 20%, 80%{ transform: rotateZ(0deg); }
+    5%, 15%, 25%  { transform: rotateZ(6deg); }
+    30%{ transform: rotateZ(-6deg); }
+    70%{ transform: rotateZ(-12deg); }
+}
+
+
+// ================================
+// ================================
+
+.face{
+    position: absolute;
+    background-color: rgba($white-01, .2);
+    border: .1 * $unit solid $white-01;
+}
+
+.p03 {
+    position: absolute;
+    top: -28 * $unit;
+    left: -21 * $unit;
+    width: 11 * $unit;
+    height: 20 * $unit;
+    transform: rotateZ(100deg) rotateY(-20deg) rotateX(-10deg);
+    transform-origin: bottom left;
+
+    animation: p03-cuerpo01 $time-03 $type-02 infinite;
+ 
+    &__cuerpo{
+        $width-el: 11 * $unit;
+        $height-el: 5  * $unit;
+        $depth-el: 10 * $unit;
+    
+        @include cube($width-el, $height-el, $depth-el);
+        width: $width-el;
+        height: $depth-el * 2;
+        position: absolute;
+        transform: translateZ(-3 * $unit);
+
+        &-front{ background-color: rgba($blue-01, .5); }
+    
+        &-top{  
+            &::before{
+                content: '';
+                position: absolute;
+                bottom: 0;
+                // left: calc(50% - 3 * $unit);
+                left: 25%;
+                width: 6 * $unit;
+                height: 5 * $unit;
+                background-color: $blue-01;
+            }
+        }        
+    }
+
+    &__ojoD,
+    &__ojoI {
+        position: absolute;
+        bottom: 3 * $unit;
+        width: 2 * $unit;
+        height: 1 * $unit;
+        background-image: radial-gradient(circle at center, $purple-01 30%, $white-01 30%);
+        border-radius: 50%;
+        border-radius: 1 * $unit;
+    }
+
+    &__ojoD { left: 3 * $unit; }
+    &__ojoI { right: 3 * $unit; }
+
+    &__boca {
+        position: absolute;
+        top: 8 * $unit;
+        left: 2 * $unit;
+        width: 7 * $unit;
+        height: 3 * $unit;
+        border-radius: 3 * $unit;
+        background-color: $purple-01;
+        overflow: hidden;
+
+        animation: p01-boca $time $type infinite;
+
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: -75%;
+            // left: calc(50% - (1.5 * $unit));
+            left: 30%   ;
+            width: 3 * $unit;
+            height: 3 * $unit;
+            border-radius: 50%;
+            background-color: $red-02
+        }
+    }
+    &__brazoD {
+        position: absolute;
+        top: 12 * $unit;
+        left: 0 * $unit;
+        width: .3 * $unit;
+        height: 6 * $unit;
+        transform-origin: top left;
+        transform: translateZ(3 * $unit) rotateZ(30deg);
+        background-color: $purple-01;
+
+        animation: p03-brazoD01 $time-02 * 15 $type infinite;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            top: 99%;
+            left: .25 * $unit;
+            width: 10 * $unit;
+            height: .4 * $unit;
+            background-color: $purple-01;
+            transform-origin: top left;
+            transform: rotateZ(60deg);
+
+            animation: p03-brazoDB01 $time-02 * 15 $type infinite;
+        }
+    }
+
+    &__brazoI {
+        position: absolute;
+        top: 12 * $unit;
+        right: 0 * $unit;
+        width: .3 * $unit;
+        height: 6 * $unit;
+        transform-origin: top left;
+        transform: translateZ(3 * $unit) rotateZ(-30deg);
+        background-color: $purple-01;
+
+        animation: p03-brazoI01 $time-02 * 15 $type infinite;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: .25 * $unit;
+            width: 10 * $unit;
+            height: .4 * $unit;
+            background-color: $purple-01;
+            transform-origin: top left;
+            transform: rotateZ(130deg);
+
+            animation: p03-brazoIB01 $time-02 * 15 $type infinite;
+        }
+    }
+
+    &__piernaD {
+        position: absolute;
+        bottom: 100%;
+        left: 3 * $unit;
+        width: .3 * $unit;
+        height: 6 * $unit;
+        transform-origin: top left;
+        background-color: $purple-01;
+
+        transform: translateZ(3 * $unit) rotateZ(0deg);
+    }
+
+    &__pantorrillaD {
+        position: absolute;
+        bottom: 100%;
+        width: 100%;
+        height: 7 * $unit;
+        transform-origin: bottom left;
+        transform:  rotateZ(20deg);
+        background-color: $purple-01;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 2.75 * $unit;
+            height: .3 * $unit;
+            bottom: 110%;
+            right: 0;
+            background-color: $purple-01;
+            transform-origin: bottom left;
+            transform: rotateZ(15deg) skewX(15deg);
+        }
+    }
+
+    &__piernaI {
+        position: absolute;
+        bottom: 100%;
+        right: 3 * $unit;
+        width: .3 * $unit;
+        height: 6 * $unit;
+        transform-origin: top left;
+        background-color: $purple-01;
+
+        transform: translateZ(3 * $unit) rotateZ(0deg);
+        animation: p03-piernaD01 $time-02 * 15 $type infinite;
+    }
+
+    &__pantorrillaI {
+        position: absolute;
+        bottom: 100%;
+        width: 100%;
+        height: 7 * $unit;
+        transform-origin: bottom left;
+        transform:  rotateZ(-5deg);
+        background-color: $purple-01;
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 2.75 * $unit;
+            height: .3 * $unit;
+            bottom: 95%;
+            left: 0;
+            background-color: $purple-01;
+            transform-origin: top left;
+            transform: rotateZ(-50deg) skewX(15deg);
+        }
+    }
+
+    &__pastilla{
+        position: absolute;
+        width: 5 * $unit;
+        height: 2.5 * $unit;
+        top: 100%;
+        left: calc(50% - 1.25 * $unit);
+        border-radius: 2.5 * $unit;
+        background-color: $white-01;
+        transform: translateZ(3 * $unit);
+        animation: p03-pastilla $time $type infinite;
+
+        &02{ animation: p03-pastilla $time-03 $type infinite; }
+    }
+
+}
+
+@keyframes p03-cuerpo01 {
+    0%, 25%, 45%, 65%, 100% {
+        top: -28 * $unit;
+        transform:rotateZ(100deg) rotateY(-20deg) rotateX(-10deg);
+    }
+
+    15%, 35%, 55%, 75% {
+        top: -22 * $unit;
+        transform: rotateZ(100deg) rotateY(-40deg) rotateX(-20deg);
+    }
+}
+
+@keyframes p03-brazoD01 {
+    0%, 10%, 20%, 30%, 80%{ transform: rtranslateZ(3 * $unit) otateZ(30deg); }
+    5%, 15%, 25%, 35% { transform: translateZ(3 * $unit) rotateZ(40deg); }
+    40%{ transform: translateZ(3 * $unit) rotateZ(30deg);  }
+    70%{ transform: translateZ(3 * $unit) rotateZ(35deg);  }
+
+}
+@keyframes p03-brazoDB01 {
+    0%, 10%, 20%, 30%, 80%{ transform: rotateZ(60deg); }
+    5%, 15%, 25%, 35% { transform: rotateZ(50deg); }
+    40%{ transform: rotateZ(40deg); }
+    70%{ transform: rotateZ(-40deg); }
+}
+
+@keyframes p03-brazoI01 {
+    0%, 25%, 45%, 65%, 100%{ transform: rtranslateZ(3 * $unit) otateZ(-30deg); }
+    15%, 35%, 55%, 75%  { transform: translateZ(3 * $unit) rotateZ(-40deg); }
+}
+@keyframes p03-piernaD01 {
+    0%, 25%, 45%, 65%, 100%{ height: 6 * $unit;}
+    15%, 35%, 55%, 75%  { height: 1 * $unit;}
+}
+
+@keyframes p03-brazoIB01 {
+    0%, 10%, 20%, 30%, 80%{ transform: rotateZ(130deg); }
+    5%, 15%, 25%, 35% { transform: rotateZ(150deg); }
+    40%{ transform: rotateZ(140deg); }
+    70%{ transform: rotateZ(100deg); }
+}
+
+@keyframes p03-pastilla {
+    0%, 35%{
+        top: 10%;
+        left: 20%;
+        transform: rotateY(20deg) rotateX(10deg) rotateZ(0deg);
+        opacity: 1;
+    }
+    5%, 40%{
+        top: 50%;
+        left: 0%;
+        transform: rotateY(30deg) rotateX(10deg) rotateZ(10deg);
+    }
+    10%, 45%{
+        top: 80%;
+        left: 65%;
+        transform: rotateY(25deg) rotateX(10deg) rotateZ(10deg);
+    }
+    15%, 50%{
+        top: 20%;
+        left: 0%;
+        transform: rotateY(20deg) rotateX(10deg) rotateZ(0deg);
+    }
+    20%, 30%{
+        top: 60%;
+        left: 60%;
+        transform: rotateY(20deg) rotateX(10deg) rotateZ(0deg);
+    }
+    25%, 55%{
+        top: 10%;
+        left: 10%;
+        transform: rotateY(10deg) rotateX(10deg) rotateZ(0deg);
+    }
+    60%{
+        top: 150%;
+        left: 50%;
+        transform: rotateY(20deg) rotateX(10deg) rotateZ(0deg);
+        opacity: 1;
+    }
+    65%, 100%{
+        top: 200%;
+        left: 50%;
+        transform: rotateY(20deg) rotateX(10deg) rotateZ(0deg);
+        opacity: 0;
+    }
+}
+
+
